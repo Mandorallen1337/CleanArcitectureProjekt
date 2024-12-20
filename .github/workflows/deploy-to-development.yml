@@ -1,0 +1,45 @@
+name: .NET Build and Test
+
+on:
+  pull_request:
+      branches:
+        - development
+  
+
+jobs:
+  run-on-dev-env:
+    runs-on: ubuntu-latest  # You can change this to windows-latest if needed
+    environment: 
+      name: DEVELOPMENT  # Set the environment to Development
+
+    steps:
+    # Step 1: Check out the code from the repository
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step 2: Set up the .NET SDK (use the appropriate version)
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'  # Set this to the .NET version you're using
+
+    # Step 3: Restore dependencies (Install NuGet packages)
+    - name: Restore dependencies
+      run: dotnet restore
+
+    # Step 4: Build the project
+    - name: Build
+      run: dotnet build --configuration Release
+
+    # Step 5: Run tests (if you have any unit tests)
+    - name: Run tests
+      run: dotnet test --configuration Release
+
+
+         
+
+    
+
+
+
+        
