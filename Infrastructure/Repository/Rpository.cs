@@ -27,7 +27,7 @@ namespace Infrastructure.Repository
             return entity;
         }
 
-        public async Task<T> GetByIdAsync(int id, CancellationToken cancellationToken)
+        public async Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Set<T>().FindAsync(new object[] { id }, cancellationToken);
         }
@@ -43,7 +43,7 @@ namespace Infrastructure.Repository
             return await _dbSet.ToListAsync();
         }
 
-        public async Task<string> DeleteByIdAsync(int id)
+        public async Task<string> DeleteByIdAsync(Guid id)
         {
             var entity = await _dbSet.FindAsync(id);
             if (entity != null)
