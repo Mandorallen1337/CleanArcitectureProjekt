@@ -10,11 +10,11 @@ namespace Application.Interfaces.RepoInterface
     {
         Task<T> CreateAsync(T entity);
 
-        Task<T> GetByIdAsync(int id, CancellationToken cancellationToken);
+        Task<T> GetByIdAsync(Guid id, CancellationToken cancellationToken);
 
         Task<List<T>> GetAllAsync();
 
-        Task<string> DeleteByIdAsync(int id);
+        Task<string> DeleteByIdAsync(Guid id);
 
         Task UpdateAsync(T entity, CancellationToken cancellationToken);
     }
