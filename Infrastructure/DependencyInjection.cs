@@ -1,13 +1,12 @@
-﻿using Application.Interfaces.RepoInterface;
+using Application.Interfaces.RepoInterface;
 using Infrastructure.Databases;
 using Infrastructure.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Application.Interfaces.BlobStorageInterface;
+using Infrastructure.Services.BlobStorageService;
+using Microsoft.Extensions.Configuration;
+
 
 namespace Infrastructure
 {
@@ -18,10 +17,10 @@ namespace Infrastructure
             services.AddDbContext<Database>(options =>
                 options.UseSqlServer(connectionString));
 
-            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));        
+            //services.AddSingleton<IBlobStorage, BlobStorageService>();
 
             return services;
         }
     }
 }
-
