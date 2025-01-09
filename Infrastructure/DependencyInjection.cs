@@ -1,14 +1,23 @@
-﻿using Application.Interfaces.BlobStorageInterface;
+using Application.Interfaces.RepoInterface;
+using Infrastructure.Databases;
+using Infrastructure.Repository;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Application.Interfaces.BlobStorageInterface;
 using Infrastructure.Services.BlobStorageService;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+
 
 namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration) 
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, string connectionString)
         {
+            services.AddDbContext<Database>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddScoped(typeof(IRepository<>), typeof(Repository<>));        
             services.AddSingleton<IBlobStorage, BlobStorageService>();
 
             return services;
