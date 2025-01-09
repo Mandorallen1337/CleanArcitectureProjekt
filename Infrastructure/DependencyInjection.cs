@@ -12,13 +12,13 @@ namespace Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration, string connectionString)
+        public static IServiceCollection AddInfrastructure(this IServiceCollection services, string connectionString)
         {
             services.AddDbContext<Database>(options =>
                 options.UseSqlServer(connectionString));
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));        
-            services.AddSingleton<IBlobStorage, BlobStorageService>();
+            //services.AddSingleton<IBlobStorage, BlobStorageService>();
 
             return services;
         }
