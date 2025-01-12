@@ -1,4 +1,4 @@
-﻿namespace Application.Commands.User
+﻿namespace Application.Commands.UserCommands
 {
     public class UpdateUserCommandHandler
     {

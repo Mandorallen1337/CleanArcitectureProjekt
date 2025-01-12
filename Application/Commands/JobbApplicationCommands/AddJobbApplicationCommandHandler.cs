@@ -1,4 +1,4 @@
-﻿namespace Application.Commands.JobbApplication
+﻿namespace Application.Commands.JobbApplicationCommands
 {
     public class AddJobbApplicationCommandHandler
     {
