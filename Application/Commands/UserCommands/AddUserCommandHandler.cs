@@ -1,6 +1,13 @@
-﻿namespace Application.Commands.UserCommands
+﻿using Domain.Models;
+using MediatR;
+
+namespace Application.Commands.UserCommands
 {
-    public class AddUserCommandHandler
+    public class AddUserCommandHandler : IRequestHandler<AddUserCommand, User>
     {
+        public Task<User> Handle(AddUserCommand request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

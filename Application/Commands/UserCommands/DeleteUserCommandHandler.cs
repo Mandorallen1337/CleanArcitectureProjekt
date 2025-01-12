@@ -1,6 +1,13 @@
-﻿namespace Application.Commands.UserCommands
+﻿using Domain.Models;
+using MediatR;
+
+namespace Application.Commands.UserCommands
 {
-    public class DeleteUserCommandHandler
+    public class DeleteUserCommandHandler : IRequestHandler<DeleteUserCommand, User>
     {
+        public Task<User> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
