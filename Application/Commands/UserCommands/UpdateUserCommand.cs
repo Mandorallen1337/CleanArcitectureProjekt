@@ -1,17 +1,16 @@
-﻿using Domain.Models;
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Domain.Models;
 
 namespace Application.Commands.UserCommands
 {
-    public class UpdateUserCommand : IRequest<User>
+    public class UpdateUserCommand : IRequest<IdentityResult>
     {
-        public UpdateUserCommand(User updatedUser, Guid id)
+        public UpdateUserCommand(User updatedUser)
         {
             UpdatedUser = updatedUser;
-            Id = id;
         }
 
         public User UpdatedUser { get; }
-        public Guid Id { get; }
     }
 }

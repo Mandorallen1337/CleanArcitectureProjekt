@@ -1,14 +1,16 @@
-﻿using Domain.Models;
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Domain.Models;
 
 namespace Application.Commands.UserCommands
 {
-    public class DeleteUserCommand : IRequest<User>
+    public class DeleteUserCommand : IRequest<IdentityResult>
     {
-        public DeleteUserCommand(Guid id)
+        public DeleteUserCommand(User user)
         {
-            Id = id;
+            User = user;
         }
-        public Guid Id { get; }
+
+        public User User { get; }
     }
 }
