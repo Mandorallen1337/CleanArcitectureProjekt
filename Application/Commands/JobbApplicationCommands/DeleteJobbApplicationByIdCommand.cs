@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Application.Commands.JobbApplicationCommands
 {
-    public class DeleteJobbApplicationCommand : IRequest<JobbApplication>
+    public class DeleteJobbApplicationByIdCommand : IRequest<JobbApplication>
     {
-        public DeleteJobbApplicationCommand(Guid id)
+        public DeleteJobbApplicationByIdCommand(Guid id)
         {
             Id = id;
         }

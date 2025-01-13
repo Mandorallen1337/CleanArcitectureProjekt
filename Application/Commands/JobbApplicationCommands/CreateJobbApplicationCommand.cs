@@ -3,9 +3,9 @@ using Domain.Models;
 
 namespace Application.Commands.JobbApplicationCommands
 {
-    public class AddJobbApplicationCommand : IRequest<JobbApplication>
+    public class CreateJobbApplicationCommand : IRequest<JobbApplication>
     {
-        public AddJobbApplicationCommand(JobbApplication newJobbApplication)
+        public CreateJobbApplicationCommand(JobbApplication newJobbApplication)
         {
             NewJobbApplication = newJobbApplication;
         }

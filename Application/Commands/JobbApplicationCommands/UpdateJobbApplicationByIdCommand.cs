@@ -3,9 +3,9 @@ using MediatR;
 
 namespace Application.Commands.JobbApplicationCommands
 {
-    public class UpdateJobbApplicationCommand : IRequest<JobbApplication>
+    public class UpdateJobbApplicationByIdCommand : IRequest<JobbApplication>
     {
-        public UpdateJobbApplicationCommand(JobbApplication updatedJobbApplication, Guid id)
+        public UpdateJobbApplicationByIdCommand(JobbApplication updatedJobbApplication, Guid id)
         {
             UpdatedJobbApplication = updatedJobbApplication;
             Id = id;
