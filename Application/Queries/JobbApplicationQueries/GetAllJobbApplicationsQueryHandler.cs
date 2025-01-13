@@ -1,13 +1,21 @@
-﻿using Domain.Models;
+﻿using Application.Interfaces.RepoInterface;
+using Domain.Models;
 using MediatR;
 
 namespace Application.Queries.JobbApplicationQueries
 {
     public class GetAllJobbApplicationsQueryHandler : IRequestHandler<GetAllJobbApplicationsQuery, List<JobbApplication>>
     {
-        public Task<List<JobbApplication>> Handle(GetAllJobbApplicationsQuery request, CancellationToken cancellationToken)
+        private readonly IRepository<JobbApplication> _jobbApplicationRepository;
+
+        public GetAllJobbApplicationsQueryHandler(IRepository<JobbApplication> jobbApplicationRepository)
         {
-            throw new NotImplementedException();
+            _jobbApplicationRepository = jobbApplicationRepository;
+        }
+
+        public async Task<List<JobbApplication>> Handle(GetAllJobbApplicationsQuery request, CancellationToken cancellationToken)
+        {
+            return await _jobbApplicationRepository.GetAllAsync();
         }
     }
 }

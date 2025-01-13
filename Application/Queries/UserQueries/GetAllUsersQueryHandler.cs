@@ -1,13 +1,21 @@
 ﻿using Domain.Models;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 
 namespace Application.Queries.UserQueries
 {
     public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<User>>
     {
-        public Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        private readonly UserManager<User> _userManager;
+
+        public GetAllUsersQueryHandler(UserManager<User> userManager)
         {
-            throw new NotImplementedException();
+            _userManager = userManager;
+        }
+
+        public async Task<List<User>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
+        {
+            return _userManager.Users.ToList();
         }
     }
 }
