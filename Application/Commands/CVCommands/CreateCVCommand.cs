@@ -3,13 +3,12 @@ using MediatR;
 
 namespace Application.Commands.CVCommands
 {
-    public class AddCVCommand : IRequest<CV>
+    public class CreateCVCommand : IRequest<CV>
     {
-        public AddCVCommand(CV newCV)
+        public CreateCVCommand(CV newCV)
         {
             NewCV = newCV;
         }
-
         public CV NewCV { get; }
     }
 }
