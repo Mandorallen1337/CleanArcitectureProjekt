@@ -7,7 +7,6 @@ using Application.Interfaces.BlobStorageInterface;
 using Infrastructure.Services.BlobStorageService;
 using Microsoft.Extensions.Configuration;
 
-
 namespace Infrastructure
 {
     public static class DependencyInjection

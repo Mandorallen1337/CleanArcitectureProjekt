@@ -13,7 +13,19 @@ namespace Infrastructure.Services.BlobStorageService
         public BlobStorageService(IConfiguration configuration)
         {
             var connectionString = configuration["AzureBlobStorage:ConnectionString"];
-            _containerName = configuration["AzureBlobStorage:ContainerName"]!;
+            var containerName = configuration["AzureBlobStorage:ContainerName"];
+
+            if (string.IsNullOrEmpty(connectionString))
+            {
+                throw new InvalidOperationException("Azure Blob Storage connection string is missing.");
+            }
+
+            if (string.IsNullOrEmpty(containerName))
+            {
+                throw new InvalidOperationException("Azure Blob Storage container name is missing.");
+            }
+
+            _containerName = containerName;
             _blobServiceClient = new BlobServiceClient(connectionString);
         }
 
