@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.RepoInterface;
+﻿using Application.Dtos;
+using Application.Interfaces.RepoInterface;
+using Application.Jobbapplication.JobbApplicationCommands.CreateJobbApplication;
 using Domain.Models;
 using Infrastructure.Repository;
 using Microsoft.AspNetCore.Http;
@@ -18,14 +20,14 @@ namespace WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAllJobbAplications()
         {
             var jobbApplications = await _jobbApplicationRepository.GetAllAsync();
             return Ok(jobbApplications);
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetJobbaplicationsById(Guid id, CancellationToken cancellationToken)
         {
             var jobbApplication = await _jobbApplicationRepository.GetByIdAsync(id, cancellationToken);
             if (jobbApplication == null)
@@ -37,14 +39,22 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] JobbApplication jobbApplication)
+        public async Task<IActionResult> CreateJobbApplication([FromBody] CreateJobbApplicationCommand jobbApplication)
         {
-            var createdJobbApplication = await _jobbApplicationRepository.CreateAsync(jobbApplication);
-            return CreatedAtAction(nameof(GetById), new { id = createdJobbApplication.Id }, createdJobbApplication);
+            var createdJobbApplication = await _jobbApplicationRepository.CreateAsync(new JobbApplication
+            {
+                JobTitle = jobbApplication.JobTitle,
+                CompanyName = jobbApplication.CompanyName,
+                ApplicationDate = DateTime.UtcNow,
+                Status = false,
+                UserId = Guid.NewGuid() // Assuming UserId is generated here, adjust as necessary
+            });
+
+            return CreatedAtAction(nameof(GetJobbaplicationsById), new { id = createdJobbApplication.Id }, createdJobbApplication);
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] JobbApplication jobbApplication, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateJobbApplication(Guid id, [FromBody] JobbApplication jobbApplication, CancellationToken cancellationToken)
         {
             if (id != jobbApplication.Id)
             {
