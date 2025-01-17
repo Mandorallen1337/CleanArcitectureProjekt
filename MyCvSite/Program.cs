@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MyCvSite.Data;
 using Infrastructure;
+using Infrastructure.Databases;
 
 namespace MyCvSite
 {
@@ -14,13 +15,11 @@ namespace MyCvSite
             // Add services to the container.
             builder.Configuration.AddUserSecrets<Program>();
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<Database>();
             builder.Services.AddRazorPages();
 
             builder.Services.AddInfrastructure(builder.Configuration);
