@@ -6,7 +6,8 @@
 //using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Mvc;
 
-//namespace WebAPI.Controllers
+
+//namespace MyCvSite.Controllers
 //{
 //    [Route("api/[controller]")]
 //    [ApiController]
