@@ -6,8 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Application.Interfaces.BlobStorageInterface;
 using Infrastructure.Services.BlobStorageService;
 using Microsoft.Extensions.Configuration;
-using Application.Interfaces.AnalyzeInterface;
-using Infrastructure.Services.AnalyzeService;
+using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure
 {
@@ -15,9 +14,11 @@ namespace Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            // Add the DbContext
             services.AddDbContext<Database>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            
+            // Add other services
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddSingleton<IBlobStorage, BlobStorageService>();
             services.AddSingleton<IAnalyze, AnalyzeService>();
