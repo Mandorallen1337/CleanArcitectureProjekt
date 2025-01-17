@@ -1,70 +1,81 @@
-﻿using Application.Interfaces.RepoInterface;
-using Domain.Models;
+﻿//using Application.Dtos;
+//using Application.Interfaces.RepoInterface;
+//using Application.Jobbapplication.JobbApplicationCommands.CreateJobbApplication;
+//using Domain.Models;
 //using Infrastructure.Repository;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+//using Microsoft.AspNetCore.Http;
+//using Microsoft.AspNetCore.Mvc;
 
-namespace WebAPI.Controllers
-{
-    [Route("api/[controller]")]
-    [ApiController]
-    public class JobbApplicationController : ControllerBase
-    {
-        private readonly IRepository<JobbApplication> _jobbApplicationRepository;
 
-        public JobbApplicationController(IRepository<JobbApplication> jobbApplicationRepository)
-        {
-            _jobbApplicationRepository = jobbApplicationRepository;
-        }
+//namespace MyCvSite.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class JobbApplicationController : ControllerBase
+//    {
+//        private readonly IRepository<JobbApplication> _jobbApplicationRepository;
 
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var jobbApplications = await _jobbApplicationRepository.GetAllAsync();
-            return Ok(jobbApplications);
-        }
+//        public JobbApplicationController(IRepository<JobbApplication> jobbApplicationRepository)
+//        {
+//            _jobbApplicationRepository = jobbApplicationRepository;
+//        }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
-        {
-            var jobbApplication = await _jobbApplicationRepository.GetByIdAsync(id, cancellationToken);
-            if (jobbApplication == null)
-            {
-                return NotFound("Job application not found.");
-            }
+//        [HttpGet]
+//        public async Task<IActionResult> GetAllJobbAplications()
+//        {
+//            var jobbApplications = await _jobbApplicationRepository.GetAllAsync();
+//            return Ok(jobbApplications);
+//        }
 
-            return Ok(jobbApplication);
-        }
+//        [HttpGet("{id:guid}")]
+//        public async Task<IActionResult> GetJobbaplicationsById(Guid id, CancellationToken cancellationToken)
+//        {
+//            var jobbApplication = await _jobbApplicationRepository.GetByIdAsync(id, cancellationToken);
+//            if (jobbApplication == null)
+//            {
+//                return NotFound("Job application not found.");
+//            }
 
-        [HttpPost]
-        public async Task<IActionResult> Create([FromBody] JobbApplication jobbApplication)
-        {
-            var createdJobbApplication = await _jobbApplicationRepository.CreateAsync(jobbApplication);
-            return CreatedAtAction(nameof(GetById), new { id = createdJobbApplication.Id }, createdJobbApplication);
-        }
+//            return Ok(jobbApplication);
+//        }
 
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> Update(Guid id, [FromBody] JobbApplication jobbApplication, CancellationToken cancellationToken)
-        {
-            if (id != jobbApplication.Id)
-            {
-                return BadRequest("Job application ID mismatch.");
-            }
+//        [HttpPost]
+//        public async Task<IActionResult> CreateJobbApplication([FromBody] CreateJobbApplicationCommand jobbApplication)
+//        {
+//            var createdJobbApplication = await _jobbApplicationRepository.CreateAsync(new JobbApplication
+//            {
+//                JobTitle = jobbApplication.JobTitle,
+//                CompanyName = jobbApplication.CompanyName,
+//                ApplicationDate = DateTime.UtcNow,
+//                Status = false,
+//                UserId = Guid.NewGuid() // Assuming UserId is generated here, adjust as necessary
+//            });
 
-            await _jobbApplicationRepository.UpdateAsync(jobbApplication, cancellationToken);
-            return NoContent();
-        }
+//            return CreatedAtAction(nameof(GetJobbaplicationsById), new { id = createdJobbApplication.Id }, createdJobbApplication);
+//        }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> Delete(Guid id)
-        {
-            var result = await _jobbApplicationRepository.DeleteByIdAsync(id);
-            if (result == "Entity not found")
-            {
-                return NotFound(result);
-            }
+//        [HttpPut("{id:guid}")]
+//        public async Task<IActionResult> UpdateJobbApplication(Guid id, [FromBody] JobbApplication jobbApplication, CancellationToken cancellationToken)
+//        {
+//            if (id != jobbApplication.Id)
+//            {
+//                return BadRequest("Job application ID mismatch.");
+//            }
 
-            return Ok(result);
-        }
-    }
-}
+//            await _jobbApplicationRepository.UpdateAsync(jobbApplication, cancellationToken);
+//            return NoContent();
+//        }
+
+//        [HttpDelete("{id:guid}")]
+//        public async Task<IActionResult> Delete(Guid id)
+//        {
+//            var result = await _jobbApplicationRepository.DeleteByIdAsync(id);
+//            if (result == "Entity not found")
+//            {
+//                return NotFound(result);
+//            }
+
+//            return Ok(result);
+//        }
+//    }
+//}
