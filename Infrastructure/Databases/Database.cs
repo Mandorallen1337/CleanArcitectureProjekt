@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Databases
 {
-    public class Database : IdentityDbContext<IdentityUser<Guid>, IdentityRole<Guid>, Guid>
+    public class Database : IdentityDbContext
     {
         public Database(DbContextOptions<Database> options) : base(options) { }
 

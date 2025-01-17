@@ -5,8 +5,11 @@ namespace MyCvSite.Pages
 {
     public class CvModel : PageModel
     {
+        
         public void OnGet()
         {
         }
+
+        
     }
 }
