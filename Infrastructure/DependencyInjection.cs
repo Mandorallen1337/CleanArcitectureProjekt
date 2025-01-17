@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Application.Interfaces.BlobStorageInterface;
 using Infrastructure.Services.BlobStorageService;
 using Microsoft.Extensions.Configuration;
+using Application.Interfaces.AnalyzeInterface;
+using Infrastructure.Services.AnalyzeService;
 
 namespace Infrastructure
 {
@@ -18,6 +20,7 @@ namespace Infrastructure
 
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddSingleton<IBlobStorage, BlobStorageService>();
+            services.AddSingleton<IAnalyze, AnalyzeService>();
 
             return services;
         }
