@@ -52,5 +52,32 @@ namespace Infrastructure.Services.BlobStorageService
             var result = await blobClient.DownloadAsync();
             return result.Value.Content;
         }
+
+        public async Task<string> UpdateFileAsync(string oldBlobName, IFormFile newFile)
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+
+            var oldBlobClient = containerClient.GetBlobClient(oldBlobName);
+            await oldBlobClient.DeleteIfExistsAsync();
+
+            var newBlobClient = containerClient.GetBlobClient(newFile.FileName);
+
+            using (var stream = newFile.OpenReadStream())
+            {
+                await newBlobClient.UploadAsync(stream, true);
+            }
+
+            return newBlobClient.Uri.ToString();
+        }
+
+        public async Task<bool> DeleteFileAsync(string blobName)
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            var response = await blobClient.DeleteIfExistsAsync();
+
+            return response;
+        }
     }
 }
