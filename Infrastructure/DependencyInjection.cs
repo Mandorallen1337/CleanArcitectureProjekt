@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Application.Interfaces.BlobStorageInterface;
 using Infrastructure.Services.BlobStorageService;
 using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Identity;
 
 namespace Infrastructure
 {

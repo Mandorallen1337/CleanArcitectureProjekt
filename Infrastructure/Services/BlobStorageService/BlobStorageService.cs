@@ -52,5 +52,15 @@ namespace Infrastructure.Services.BlobStorageService
             var result = await blobClient.DownloadAsync();
             return result.Value.Content;
         }
+
+        public async Task<bool> DeleteFileAsync(string blobName)
+        {
+            var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
+            var blobClient = containerClient.GetBlobClient(blobName);
+
+            var response = await blobClient.DeleteIfExistsAsync();
+
+            return response;
+        }
     }
 }
