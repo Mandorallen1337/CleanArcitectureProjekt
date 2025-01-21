@@ -1,8 +1,7 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using MyCvSite.Data;
+using Application;
 using Infrastructure;
 using Infrastructure.Databases;
+using Microsoft.AspNetCore.Identity;
 
 namespace MyCvSite
 {
@@ -15,13 +14,14 @@ namespace MyCvSite
             // Add services to the container.
             builder.Configuration.AddUserSecrets<Program>();
 
-            
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<Database>();
             builder.Services.AddRazorPages();
 
+            builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
 
             var app = builder.Build();
