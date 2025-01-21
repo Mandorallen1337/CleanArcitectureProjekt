@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Application.Interfaces.BlobStorageInterface;
 using Infrastructure.Services.BlobStorageService;
 using Microsoft.Extensions.Configuration;
+using Application.Interfaces.ValidateFileInterface;
+using Infrastructure.Services.ValidateFileService;
 
 namespace Infrastructure
 {
@@ -20,6 +22,7 @@ namespace Infrastructure
             // Add other services
             services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             services.AddSingleton<IBlobStorage, BlobStorageService>();
+            services.AddTransient<IValidateFile, ValidateFileService>();
 
             return services;
         }

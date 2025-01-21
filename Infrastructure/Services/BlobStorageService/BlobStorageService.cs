@@ -44,13 +44,17 @@ namespace Infrastructure.Services.BlobStorageService
             return blobClient.Uri.ToString();
         }
 
-        public async Task<Stream> DownloadFileAsync(string blobName)
+        public async Task<byte[]> DownloadFileAsync(string blobName)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
             var blobClient = containerClient.GetBlobClient(blobName);
 
             var result = await blobClient.DownloadAsync();
-            return result.Value.Content;
+
+            using var memoryStream = new MemoryStream();
+            await result.Value.Content.CopyToAsync(memoryStream);
+
+            return memoryStream.ToArray();
         }
 
         public async Task<bool> DeleteFileAsync(string blobName)

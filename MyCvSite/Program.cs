@@ -13,7 +13,8 @@ namespace MyCvSite
 
             // Add services to the container.
             builder.Configuration.AddUserSecrets<Program>();
-
+            builder.Services.AddControllers();
+            builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -46,6 +47,7 @@ namespace MyCvSite
             app.UseAuthorization();
 
             app.MapRazorPages();
+            app.MapControllers();
 
             app.Run();
         }

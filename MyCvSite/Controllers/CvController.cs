@@ -1,6 +1,5 @@
 ﻿using Application.Commands.CVCommands;
 using Application.Queries.CVQueries;
-using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,11 +19,16 @@ namespace MyCvSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CV cv)
+        public async Task<IActionResult> Create([FromForm] IFormFile cv, [FromForm] Guid userId)
         {
+            if (cv == null || cv.Length == 0)
+            {
+                return BadRequest(new { Message = "Please provide a valid PDF file." });
+            }
+
             try
             {
-                var createCvResult = await _mediator.Send(new CreateCVCommand(cv));
+                var createCvResult = await _mediator.Send(new CreateCVCommand(cv, userId));
                 _logger.LogInformation("Successfully created a new CV with ID {CvId}.", createCvResult.Id);
                 return Ok(createCvResult);
             }
@@ -73,11 +77,11 @@ namespace MyCvSite.Controllers
         }
 
         [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateCvById(Guid id, [FromBody] CV cv, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateCvById(Guid id, [FromForm] IFormFile cv, [FromForm] string userId, CancellationToken cancellationToken)
         {
             try
             {
-                var updateCvByIdResult = await _mediator.Send(new UpdateCVByIdCommand(id, cv));
+                var updateCvByIdResult = await _mediator.Send(new UpdateCVByIdCommand(id, cv, userId));
                 _logger.LogInformation("Successfully updated CV with ID {CvId}.", id);
                 return Ok(updateCvByIdResult);
             }
