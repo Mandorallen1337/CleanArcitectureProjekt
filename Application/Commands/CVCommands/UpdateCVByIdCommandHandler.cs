@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Domain.Models;
 using MediatR;
 using Application.Interfaces.BlobStorageInterface;
-using Microsoft.AspNetCore.Http.Internal;
 
 namespace Application.Commands.CVCommands
 {

@@ -1,4 +1,4 @@
-﻿using Application.Common.Models;
+﻿using Application.Utilities.DownloadFile;
 using MediatR;
 
 namespace Application.Commands.CVCommands

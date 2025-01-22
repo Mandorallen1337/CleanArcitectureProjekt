@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using Domain.Models;
 using MediatR;
 using Application.Interfaces.BlobStorageInterface;
-using Application.Interfaces.ValidateFileInterface;
+using Application.Utilities.ValidateFile;
 
 namespace Application.Commands.CVCommands
 {
@@ -11,14 +11,12 @@ namespace Application.Commands.CVCommands
     {
         private readonly IRepository<CV> _cvRepository;
         private readonly IBlobStorage _blobStorage;
-        private readonly IValidateFile _validateFile;
         private readonly ILogger<CreateCVCommandHandler> _logger;
 
-        public CreateCVCommandHandler(IRepository<CV> cvRepository, IBlobStorage blobStorage, IValidateFile validateFile, ILogger<CreateCVCommandHandler> logger)
+        public CreateCVCommandHandler(IRepository<CV> cvRepository, IBlobStorage blobStorage, ILogger<CreateCVCommandHandler> logger)
         {
             _cvRepository = cvRepository;
             _blobStorage = blobStorage;
-            _validateFile = validateFile;
             _logger = logger;
         }
 
@@ -28,7 +26,7 @@ namespace Application.Commands.CVCommands
             {
                 _logger.LogInformation("Creating a new CV for User ID {UserId}.", request.UserId);
 
-                bool isValid = await _validateFile.IsValidPDFAsync(request.NewCV);
+                bool isValid = await ValidateFile.IsValidPDFAsync(request.NewCV);
                 if (!isValid)
                 {
                     _logger.LogWarning("Invalid CV fileformat uploaded by User ID {UserId}.", request.UserId);

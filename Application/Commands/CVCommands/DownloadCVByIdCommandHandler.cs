@@ -1,4 +1,4 @@
-﻿using Application.Common.Models;
+﻿using Application.Utilities.DownloadFile;
 using Application.Interfaces.BlobStorageInterface;
 using Application.Interfaces.RepoInterface;
 using Domain.Models;
