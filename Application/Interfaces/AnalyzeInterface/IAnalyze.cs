@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
-
-namespace Application.Interfaces.AnalyzeInterface
+﻿namespace Application.Interfaces.AnalyzeInterface
 {
     public interface IAnalyze
     {
-        Task<string> AnalyzeCVAsync(IFormFile file);
+        Task<string> AnalyzeCVAsync(string blobFileName, CancellationToken cancellationToken);
     }
 }

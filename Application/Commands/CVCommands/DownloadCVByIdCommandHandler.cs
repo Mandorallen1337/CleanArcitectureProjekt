@@ -31,12 +31,15 @@ namespace Application.Commands.CVCommands
                     throw new KeyNotFoundException($"CV with ID {request.Id} was not found.");
                 }
 
-                var fileBytes = await _blobStorage.DownloadFileAsync(cv.FileUrl);
+                using var fileStream = await _blobStorage.DownloadFileAsync(cv.FileUrl);
+
+                using var memoryStream = new MemoryStream();
+                await fileStream.CopyToAsync(memoryStream, cancellationToken);
 
                 return new FileResult
                 {
                     FileName = Path.GetFileName(cv.FileUrl),
-                    Content = fileBytes
+                    Content = memoryStream.ToArray()
                 };
             }
             catch (Exception ex)

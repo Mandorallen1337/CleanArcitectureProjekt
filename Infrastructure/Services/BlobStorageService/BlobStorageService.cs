@@ -29,6 +29,7 @@ namespace Infrastructure.Services.BlobStorageService
             _blobServiceClient = new BlobServiceClient(connectionString);
         }
 
+        //Upload file to Azure and return it's URL
         public async Task<string> UploadFileAsync(IFormFile file)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
@@ -44,19 +45,24 @@ namespace Infrastructure.Services.BlobStorageService
             return blobClient.Uri.ToString();
         }
 
-        public async Task<byte[]> DownloadFileAsync(string blobName)
+        //Download file from Azure using it's URL and return it as a stream containing the file's data
+        public async Task<Stream> DownloadFileAsync(string fileUrl)
         {
+            string fileName = Path.GetFileName(new Uri(fileUrl).AbsolutePath);
+
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
-            var blobClient = containerClient.GetBlobClient(blobName);
+            var blobClient = containerClient.GetBlobClient(fileName);
 
             var result = await blobClient.DownloadAsync();
+            var memoryStream = new MemoryStream();
 
-            using var memoryStream = new MemoryStream();
             await result.Value.Content.CopyToAsync(memoryStream);
+            memoryStream.Position = 0;  
 
-            return memoryStream.ToArray();
+            return memoryStream;
         }
 
+        //Delete file from Azure if exists and return true/false
         public async Task<bool> DeleteFileAsync(string blobName)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);

@@ -76,6 +76,28 @@ namespace MyCvSite.Controllers
             }
         }
 
+        [HttpGet("download/{id}")]
+        public async Task<IActionResult> DownloadCVById(Guid id, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var cvResult = await _mediator.Send(new DownloadCVByIdCommand(id));
+
+                if (cvResult == null)
+                {
+                    _logger.LogWarning("CV with ID {CvId} was not found.", id);
+                    return NotFound($"CV with ID {id} not found.");
+                }
+
+                return File(cvResult.Content, "application/octet-stream", cvResult.FileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error downloading file");
+                return StatusCode(500, "Internal server error");
+            }
+        }
+
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateCvById(Guid id, [FromForm] IFormFile cv, [FromForm] string userId, CancellationToken cancellationToken)
         {
