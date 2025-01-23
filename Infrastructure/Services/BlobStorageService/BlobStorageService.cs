@@ -29,7 +29,7 @@ namespace Infrastructure.Services.BlobStorageService
             _blobServiceClient = new BlobServiceClient(connectionString);
         }
 
-        //Upload file to Azure and return it's URL
+        //Uploads file to Azure and return the URL
         public async Task<string> UploadFileAsync(IFormFile file)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
@@ -45,7 +45,8 @@ namespace Infrastructure.Services.BlobStorageService
             return blobClient.Uri.ToString();
         }
 
-        //Download file from Azure using it's URL and return it as a stream containing the file's data
+        //Downloads file from Azure using its URL and returns the file as a stream
+        //MemoryStream is used to temporarily store the downloaded file in memory instead of writing it to disk 
         public async Task<Stream> DownloadFileAsync(string fileUrl)
         {
             string fileName = Path.GetFileName(new Uri(fileUrl).AbsolutePath);
@@ -62,7 +63,7 @@ namespace Infrastructure.Services.BlobStorageService
             return memoryStream;
         }
 
-        //Delete file from Azure if exists and return true/false
+        //Deletes file from Azure if it exist and return true/false
         public async Task<bool> DeleteFileAsync(string blobName)
         {
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);

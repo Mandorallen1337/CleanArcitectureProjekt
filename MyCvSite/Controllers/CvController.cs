@@ -89,7 +89,7 @@ namespace MyCvSite.Controllers
                     return NotFound($"CV with ID {id} not found.");
                 }
 
-                return File(cvResult.Content, "application/octet-stream", cvResult.FileName);
+                return File(cvResult.Content, "application/pdf", cvResult.FileUrl);
             }
             catch (Exception ex)
             {
