@@ -5,7 +5,7 @@ namespace Application.Utilities.ValidateFile;
 
 public static class ValidateFile
 {
-    //Reads the uploaded file into memory, verifies it's a valid PDF that contains at least one page
+    //Validates that the file is a PDF by checking its extension and verifying its content by reading the number of pages
     public static async Task<bool> IsValidPDFAsync(IFormFile file)
     {
         if (file == null || file.Length == 0)
