@@ -73,5 +73,5 @@ namespace MyCvSite.Controllers
 
             return Ok(result);
         }
-    }
+    }   
 }

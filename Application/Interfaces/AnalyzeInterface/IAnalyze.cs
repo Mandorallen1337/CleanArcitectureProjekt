@@ -2,6 +2,6 @@
 {
     public interface IAnalyze
     {
-        Task<string> AnalyzeCVAsync(string fileContent);
+        Task<string> AnalyzeCVAsync(string blobFileName, CancellationToken cancellationToken);
     }
 }

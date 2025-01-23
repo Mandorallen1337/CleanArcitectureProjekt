@@ -2,17 +2,20 @@
 using Microsoft.Extensions.Logging;
 using Domain.Models;
 using MediatR;
+using Application.Interfaces.BlobStorageInterface;
 
 namespace Application.Commands.CVCommands
 {
     public class UpdateCVByIdCommandHandler : IRequestHandler<UpdateCVByIdCommand, CV>
     {
         private readonly IRepository<CV> _cvRepository;
+        private readonly IBlobStorage _blobStorage;
         private readonly ILogger<UpdateCVByIdCommandHandler> _logger;
 
-        public UpdateCVByIdCommandHandler(IRepository<CV> cvRepository, ILogger<UpdateCVByIdCommandHandler> logger)
+        public UpdateCVByIdCommandHandler(IRepository<CV> cvRepository, IBlobStorage blobStorage, ILogger<UpdateCVByIdCommandHandler> logger)
         {
             _cvRepository = cvRepository;
+            _blobStorage = blobStorage;
             _logger = logger;
         }
 
@@ -30,9 +33,26 @@ namespace Application.Commands.CVCommands
                     throw new KeyNotFoundException($"CV with ID {request.Id} was not found.");
                 }
 
-                existingEntity.FileUrl = request.UpdatedCV.FileUrl;
+                if (!string.IsNullOrEmpty(existingEntity.FileUrl))
+                {
+                    var oldBlobName = Path.GetFileName(new Uri(existingEntity.FileUrl).LocalPath);
+                    var blobDeleted = await _blobStorage.DeleteFileAsync(oldBlobName);
+
+                    if (!blobDeleted)
+                    {
+                        _logger.LogWarning("Failed to delete old blob with name {BlobName}.", oldBlobName);
+                    }
+                }
+
+                string newFileUrl = null!;
+                if (request.UpdatedCV != null)
+                {
+                    newFileUrl = await _blobStorage.UploadFileAsync(request.UpdatedCV);
+                }
+
+                existingEntity.FileUrl = newFileUrl ?? existingEntity.FileUrl;
                 existingEntity.UploadDate = DateTime.UtcNow;
-                existingEntity.UserId = request.UpdatedCV.UserId;
+                existingEntity.UserId = Guid.Parse(request.UserId);
 
                 await _cvRepository.UpdateAsync(existingEntity, cancellationToken);
 
