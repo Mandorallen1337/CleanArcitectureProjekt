@@ -38,6 +38,7 @@ namespace Application.Commands.CVCommands
                 var cvEntity = new CV
                 {
                     FileUrl = fileUrl,
+                    FileName = request.FileName,
                     UploadDate = DateTime.UtcNow,
                     UserId = request.UserId
                 };
