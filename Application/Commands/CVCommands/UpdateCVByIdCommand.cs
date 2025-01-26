@@ -11,10 +11,12 @@ namespace Application.Commands.CVCommands
             Id = id;
             UpdatedCV = updatedCV;
             UserId = userId;
+            FileName = Path.GetFileName(updatedCV.FileName);
         }
 
         public Guid Id { get; set; }
         public IFormFile UpdatedCV { get; set; }
         public string UserId { get; set; }
+        public string FileName { get; set; }
     }
 }

@@ -10,8 +10,10 @@ namespace Application.Commands.CVCommands
         {
             NewCV = newCV;
             UserId = userId;
+            FileName = Path.GetFileName(newCV.FileName);
         }
         public IFormFile NewCV { get; }
         public Guid UserId { get; }
+        public string FileName { get; }
     }
 }

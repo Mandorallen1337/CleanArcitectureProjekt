@@ -48,9 +48,11 @@ namespace Application.Commands.CVCommands
                 if (request.UpdatedCV != null)
                 {
                     newFileUrl = await _blobStorage.UploadFileAsync(request.UpdatedCV);
+                    existingEntity.FileName = request.FileName;
                 }
 
                 existingEntity.FileUrl = newFileUrl ?? existingEntity.FileUrl;
+                existingEntity.FileName = request.FileName ?? existingEntity.FileName;
                 existingEntity.UploadDate = DateTime.UtcNow;
                 existingEntity.UserId = Guid.Parse(request.UserId);
 
