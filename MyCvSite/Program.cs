@@ -15,6 +15,7 @@ namespace MyCvSite
             builder.Configuration.AddUserSecrets<Program>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddHttpClient();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

@@ -1,11 +1,34 @@
 ﻿@page
 
 @model MyCvSite.Pages.CvModel
-@{
-}
 
-<h1>Cv</h1>
-    
-<p>Cv page content</p>
-
-
+<div class="card shadow-sm p-4 mb-4">
+	<table class="table">
+		<thead>
+			<tr>
+				<th>CV</th>
+				<th>Date</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach(var cv in Model.CVs)
+			{
+				<tr>
+					<td>
+						<a href="" data-bs-target="#cvModal">
+							@cv.FileName
+						</a>
+					</td>
+					<td>@cv.UploadDate</td>
+					<td>
+						<button type="button" class="btn btn-success">Feedback</button>
+						<button type="button" class="btn btn-success">Download</button>
+						<button type="button" class="btn btn-info">Edit</button>
+						<button type="button" class="btn btn-danger">Delete</button>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
