@@ -8,27 +8,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using Application.Queries.JobbApplicationQuerys;
 
-public class GetAllJobbAplicationsHandler : IRequestHandler<GetAllJobbApplicationsQuery, List<JobbApplicationDto>>
+public class GetAllJobbAplicationsHandler : IRequestHandler<GetAllJobbApplicationsQuery, List<JobbApplicationViewModel>>
 {
-    private readonly IRepository<JobbApplication> _jobbApplicationRepository;
+    private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public GetAllJobbAplicationsHandler(IRepository<JobbApplication> jobbApplicationRepository)
+    public GetAllJobbAplicationsHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }
 
-    public async Task<List<JobbApplicationDto>> Handle(GetAllJobbApplicationsQuery request, CancellationToken cancellationToken)
+    public async Task<List<JobbApplicationViewModel>> Handle(GetAllJobbApplicationsQuery request, CancellationToken cancellationToken)
     {
         // Hämta alla jobbansökningar från databasen
-        var jobbApplications = await _jobbApplicationRepository.GetAllAsync();
+        var jobApplications = await _jobbApplicationRepository.GetAllAsync() ?? new List<JobbApplicationViewModel>();        
 
-        // Mappar till en lista av DTOs
-        var jobbApplicationDtos = jobbApplications.Select(j => new JobbApplicationDto
-        {
-            JobTitle = j.JobTitle,
-            CompanyName = j.CompanyName
-        }).ToList();
-
-        return jobbApplicationDtos;
+        return jobApplications;
     }
 }

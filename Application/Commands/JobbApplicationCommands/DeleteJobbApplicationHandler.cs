@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 public class DeleteJobbApplicationHandler : IRequestHandler<DeleteJobbApplicationCommand, bool>
 {
-    private readonly IRepository<JobbApplication> _jobbApplicationRepository;
+    private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public DeleteJobbApplicationHandler(IRepository<JobbApplication> jobbApplicationRepository)
+    public DeleteJobbApplicationHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }

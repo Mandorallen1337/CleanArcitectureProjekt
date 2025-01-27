@@ -1,6 +1,6 @@
 ﻿namespace Domain.Models
 {
-    public class JobbApplication
+    public class JobbApplicationViewModel
     {
         public Guid Id { get; set; }
         public string JobTitle { get; set; } = string.Empty;
@@ -10,7 +10,15 @@
 
         public Guid UserId { get; set; }
 
-        public JobbApplication() { }
+        public JobbApplicationViewModel() { }
+
+        public JobbApplicationViewModel(string jobTitle, string companyName, DateTime applicationDate)
+        {
+            JobTitle = jobTitle;
+            CompanyName = companyName;
+            ApplicationDate = applicationDate;            
+            UserId = Guid.NewGuid();
+        }
 
     }
     

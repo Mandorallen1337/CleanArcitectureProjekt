@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.JobbApplicationQuerys
 {
-    public class GetAllJobbApplicationsQuery : IRequest<List<JobbApplicationDto>>
+    public class GetAllJobbApplicationsQuery : IRequest<List<JobbApplicationViewModel>>
     {
     }
 

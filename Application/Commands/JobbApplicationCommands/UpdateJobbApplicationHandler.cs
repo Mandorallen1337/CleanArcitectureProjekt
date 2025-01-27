@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 public class UpdateJobbApplicationHandler : IRequestHandler<UpdateJobbApplicationCommand, Unit>
 {
-    private readonly IRepository<JobbApplication> _jobbApplicationRepository;
+    private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public UpdateJobbApplicationHandler(IRepository<JobbApplication> jobbApplicationRepository)
+    public UpdateJobbApplicationHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }

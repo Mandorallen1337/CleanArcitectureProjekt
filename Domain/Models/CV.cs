@@ -8,5 +8,14 @@
         public DateTime UploadDate { get; set; }
 
         public Guid UserId { get; set; }
+
+        public CV() { }
+
+        public CV(string fileUrl, DateTime uploadDate, Guid userId)
+        {
+            FileUrl = fileUrl;
+            UploadDate = uploadDate;
+            UserId = userId;
+        }
     }
 }
