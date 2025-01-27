@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 
 public class GetJobbApplicationByIdHandler : IRequestHandler<GetJobbApplicationByIdQuery, JobbApplicationDto>
 {
-    private readonly IRepository<JobbApplication> _jobbApplicationRepository;
+    private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public GetJobbApplicationByIdHandler(IRepository<JobbApplication> jobbApplicationRepository)
+    public GetJobbApplicationByIdHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }

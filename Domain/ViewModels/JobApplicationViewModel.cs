@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Dtos
+namespace Domain.ViewModels
 {
-    public class JobbApplicationDto
+    public class JobApplicationViewModel
     {
-        
         public string JobTitle { get; set; } = string.Empty;
         public string CompanyName { get; set; } = string.Empty;
         public DateTime ApplicationDate { get; set; }

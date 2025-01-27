@@ -1,4 +1,5 @@
 ﻿@page
+@using Domain.ViewModels
 @model MyCvSite.Pages.JobTrackerModel
 @{
 }
@@ -7,3 +8,54 @@
 
 <p>Job Tracker page content</p>
 
+
+
+<form method="post" asp-page-handler="Add">
+    <div class="form-group">
+        <label for="JobTitle">Job Title</label>
+        <input type="text" id="JobTitle" class="form-control" asp-for="NewJobApplication.JobTitle" required />
+    </div>
+
+    <div class="form-group">
+        <label for="CompanyName">Company Name</label>
+        <input type="text" id="CompanyName" class="form-control" asp-for="NewJobApplication.CompanyName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Status">Status</label>
+        <input type="text" id="Status" class="form-control" asp-for="NewJobApplication.Status" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Add Job Application</button>
+</form>
+
+<div class="container">
+    <!-- Header rad -->
+    <div class="row bg-light py-2">
+        @foreach (var property in typeof(JobApplicationViewModel).GetProperties())
+        {
+            <div class="col border text-center">
+                <strong>@property.Name</strong>
+            </div>
+        }
+    </div>
+
+    <!-- Visa alla jobbansökningar -->
+    @foreach (var job in Model.JobApplications)
+    {
+        <div class="row">
+            <div class="col border text-center">
+                @job.JobTitle
+            </div>
+            <div class="col border text-center">
+                @job.CompanyName
+            </div>
+            <div class="col border text-center">
+                @job.ApplicationDate.ToString("yyyy-MM-dd")   <!-- Eller något annat format -->
+            </div>
+            <div class="col border text-center">
+                @job.Status
+            </div>
+        </div>
+    }
+</div>

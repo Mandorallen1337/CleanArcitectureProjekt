@@ -7,35 +7,30 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class CreateJobbApplicationHandler : IRequestHandler<CreateJobbApplicationCommand, JobbApplicationDto>
+public class CreateJobbApplicationHandler : IRequestHandler<CreateJobbApplicationCommand, JobbApplicationViewModel>
 {
-    private readonly IRepository<JobbApplication> _jobbApplicationRepository;
+    private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public CreateJobbApplicationHandler(IRepository<JobbApplication> jobbApplicationRepository)
+    public CreateJobbApplicationHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }
 
-    public async Task<JobbApplicationDto> Handle(CreateJobbApplicationCommand request, CancellationToken cancellationToken)
+    public async Task<JobbApplicationViewModel> Handle(CreateJobbApplicationCommand request, CancellationToken cancellationToken)
     {
         // Skapa en ny jobbansökan
-        var jobbApplication = new JobbApplication
+        var jobbApplication = new JobbApplicationViewModel
         {
             JobTitle = request.JobTitle,
             CompanyName = request.CompanyName,
             ApplicationDate = DateTime.UtcNow,
-            Status = false,
-            UserId = Guid.NewGuid()
+            Status = false
+            
         };
 
         // Spara jobbansökan i databasen
         var createdJobbApplication = await _jobbApplicationRepository.CreateAsync(jobbApplication);
 
-        // Returnera en DTO som svar
-        return new JobbApplicationDto
-        {
-            JobTitle = createdJobbApplication.JobTitle,
-            CompanyName = createdJobbApplication.CompanyName
-        };
+        return createdJobbApplication;
     }
 }

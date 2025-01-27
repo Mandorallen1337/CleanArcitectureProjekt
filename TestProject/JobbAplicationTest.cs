@@ -14,7 +14,7 @@ namespace TestProject
 {
     public class JobbApplicationTest
     {
-        private Mock<IRepository<JobbApplication>> _jobbApplicationRepositoryMock;
+        private Mock<IRepository<JobbApplicationViewModel>> _jobbApplicationRepositoryMock;
         private CreateJobbApplicationHandler _createHandler;
         private DeleteJobbApplicationHandler _deleteHandler;
         private UpdateJobbApplicationHandler _updateHandler;
@@ -22,7 +22,7 @@ namespace TestProject
         [SetUp]
         public void SetUp()
         {
-            _jobbApplicationRepositoryMock = new Mock<IRepository<JobbApplication>>();
+            _jobbApplicationRepositoryMock = new Mock<IRepository<JobbApplicationViewModel>>();
 
             // Initiera handlers
             _createHandler = new CreateJobbApplicationHandler(_jobbApplicationRepositoryMock.Object);
@@ -40,7 +40,7 @@ namespace TestProject
                 CompanyName = "Tech Corp"
             };
 
-            var jobbApplicationEntity = new JobbApplication
+            var jobbApplicationEntity = new JobbApplicationViewModel
             {
                 Id = Guid.NewGuid(),
                 JobTitle = command.JobTitle,
@@ -51,7 +51,7 @@ namespace TestProject
             };
 
             _jobbApplicationRepositoryMock
-                .Setup(repo => repo.CreateAsync(It.IsAny<JobbApplication>()))
+                .Setup(repo => repo.CreateAsync(It.IsAny<JobbApplicationViewModel>()))
                 .ReturnsAsync(jobbApplicationEntity);
 
             // Act
@@ -61,7 +61,7 @@ namespace TestProject
             Assert.That(result, Is.Not.Null);
             Assert.That(result.JobTitle, Is.EqualTo(command.JobTitle));
             Assert.That(result.CompanyName, Is.EqualTo(command.CompanyName));
-            _jobbApplicationRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<JobbApplication>()), Times.Once);
+            _jobbApplicationRepositoryMock.Verify(repo => repo.CreateAsync(It.IsAny<JobbApplicationViewModel>()), Times.Once);
         }
 
         [Test]
@@ -113,7 +113,7 @@ namespace TestProject
                 ApplicationDate = DateTime.UtcNow
             };
 
-            var existingJobbApplication = new JobbApplication
+            var existingJobbApplication = new JobbApplicationViewModel
             {
                 Id = command.Id,
                 JobTitle = "Old Title",
@@ -131,7 +131,7 @@ namespace TestProject
 
             // Assert
             _jobbApplicationRepositoryMock.Verify(repo => repo.GetByIdAsync(command.Id, It.IsAny<CancellationToken>()), Times.Once);
-            _jobbApplicationRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<JobbApplication>(), It.IsAny<CancellationToken>()), Times.Once);
+            _jobbApplicationRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<JobbApplicationViewModel>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]
@@ -142,12 +142,12 @@ namespace TestProject
 
             _jobbApplicationRepositoryMock
                 .Setup(repo => repo.GetByIdAsync(command.Id, It.IsAny<CancellationToken>()))
-                .ReturnsAsync((JobbApplication)null);
+                .ReturnsAsync((JobbApplicationViewModel)null);
 
             // Act & Assert
             Assert.ThrowsAsync<KeyNotFoundException>(async () => await _updateHandler.Handle(command, CancellationToken.None));
             _jobbApplicationRepositoryMock.Verify(repo => repo.GetByIdAsync(command.Id, It.IsAny<CancellationToken>()), Times.Once);
-            _jobbApplicationRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<JobbApplication>(), It.IsAny<CancellationToken>()), Times.Never);
+            _jobbApplicationRepositoryMock.Verify(repo => repo.UpdateAsync(It.IsAny<JobbApplicationViewModel>(), It.IsAny<CancellationToken>()), Times.Never);
         }
     }
 }

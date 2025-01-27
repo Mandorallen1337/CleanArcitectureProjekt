@@ -1,6 +1,7 @@
 ﻿using Application.Commands.JobbApplicationCommands;
 using Application.Dtos;
 using Application.Queries.JobbApplicationQuerys;
+using Domain.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,12 +22,20 @@ namespace MyCvSite.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllJobbAplications()
+        public async Task<List<JobbApplicationViewModel>> GetAllJobbAplications()
         {
             _logger.LogInformation("Fetching all job applications.");
             var jobbApplications = await _mediator.Send(new GetAllJobbApplicationsQuery());
+            var jobApplicationViewModels = jobbApplications.Select(j => new JobbApplicationViewModel
+            {                
+                JobTitle = j.JobTitle,
+                CompanyName = j.CompanyName,
+                ApplicationDate = j.ApplicationDate,
+                Status = j.Status
+            }).ToList();
             _logger.LogInformation("Fetched {Count} job applications.", jobbApplications.Count);
-            return Ok(jobbApplications);
+
+            return jobApplicationViewModels;
         }
 
         [HttpGet("{id:guid}")]
@@ -45,14 +54,28 @@ namespace MyCvSite.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateJobbApplication([FromBody] CreateJobbApplicationCommand jobbApplicationCommand)
+        public async Task<IActionResult> CreateJobbApplication([FromBody] JobbApplicationViewModel jobbApplication)
         {
-            _logger.LogInformation("Creating a new job application for job title {JobTitle}.", jobbApplicationCommand.JobTitle);
-            var createdJobbApplicationDto = await _mediator.Send(jobbApplicationCommand);
-            _logger.LogInformation("Created job application for job title {JobTitle}.", createdJobbApplicationDto.JobTitle);
+            _logger.LogInformation("Creating a new job application for job title {JobTitle}.", jobbApplication.JobTitle);
 
-            return CreatedAtAction(nameof(GetJobbaplicationsById), new { id = createdJobbApplicationDto.JobTitle }, createdJobbApplicationDto);
+            // Skapa ett nytt CreateJobbApplicationCommand och skicka till MediatR
+            var createCommand = new CreateJobbApplicationCommand
+            {
+                JobTitle = jobbApplication.JobTitle,
+                CompanyName = jobbApplication.CompanyName,
+                ApplicationDate = jobbApplication.ApplicationDate,
+                Status = jobbApplication.Status
+            };
+
+            await _mediator.Send(createCommand);
+
+            // Hämta den uppdaterade listan efter skapandet
+            var updatedJobApplications = await _mediator.Send(new GetAllJobbApplicationsQuery());
+
+            _logger.LogInformation("Returning updated job applications list.");
+            return Ok(updatedJobApplications);
         }
+
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateJobbApplication(Guid id, [FromBody] UpdateJobbApplicationCommand command, CancellationToken cancellationToken)

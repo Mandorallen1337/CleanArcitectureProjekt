@@ -2,6 +2,7 @@ using Application;
 using Infrastructure;
 using Infrastructure.Databases;
 using Microsoft.AspNetCore.Identity;
+using MyCvSite.Controllers;
 
 namespace MyCvSite
 {
@@ -25,6 +26,8 @@ namespace MyCvSite
 
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddTransient<JobbApplicationController>();
+
 
             var app = builder.Build();
 
