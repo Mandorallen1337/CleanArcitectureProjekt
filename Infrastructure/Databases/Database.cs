@@ -10,6 +10,6 @@ namespace Infrastructure.Databases
         public Database(DbContextOptions<Database> options) : base(options) { }
 
         public DbSet<CV> CVs { get; set; }
-        public DbSet<JobbApplication> JobbApplications { get; set; }
+        public DbSet<JobbApplicationViewModel> JobbApplications { get; set; }
     }
 }
