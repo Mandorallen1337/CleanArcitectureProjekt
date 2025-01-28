@@ -116,7 +116,7 @@ namespace MyCvSite.Controllers
             {
                 var deleteCvByIdResult = await _mediator.Send(new DeleteCVByIdCommand(id));
                 _logger.LogInformation("Successfully deleted CV with ID {CvId}.", id);
-                return Ok(deleteCvByIdResult);
+                return Ok();
             }
             catch (Exception ex)
             {

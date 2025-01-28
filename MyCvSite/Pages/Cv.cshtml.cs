@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace MyCvSite.Pages
 {
-    [Authorize]
+    //[Authorize]
     public class CvModel : PageModel
     {
         private readonly CVController _cvController;
@@ -78,6 +78,36 @@ namespace MyCvSite.Pages
                 TempData["Error"] = "An internal error occurred.";
                 return RedirectToPage();
             }
+        }
+
+        public async Task<IActionResult> OnPostDelete(Guid id)
+        {
+            if (id == Guid.Empty)
+            {
+                TempData["Error"] = "Invalid CV ID.";
+                return RedirectToPage();
+            }
+
+            try
+            {
+                var result = await _cvController.DeleteCvById(id);
+
+                if (result is OkResult)
+                {
+                    TempData["Success"] = "CV deleted successfully.";
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to delete the CV.";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while deleting the CV: {ex.Message}");
+                TempData["Error"] = "An internal error occurred.";
+            }
+
+            return RedirectToPage();
         }
     }
 }
