@@ -16,7 +16,6 @@ namespace MyCvSite
             builder.Configuration.AddUserSecrets<Program>();
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddHttpClient();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
@@ -27,6 +26,7 @@ namespace MyCvSite
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddTransient<JobbApplicationController>();
+            builder.Services.AddTransient<CVController>();
 
 
             var app = builder.Build();

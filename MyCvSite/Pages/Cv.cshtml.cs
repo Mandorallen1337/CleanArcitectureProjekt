@@ -1,24 +1,20 @@
 using Domain.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MyCvSite.Controllers;
+using System.Security.Claims;
 
 namespace MyCvSite.Pages
 {
+    [Authorize]
     public class CvModel : PageModel
     {
-        private readonly HttpClient _httpClient;
-        private readonly string _apiBaseUrl;
+        private readonly CVController _cvController;
 
-        public CvModel(IConfiguration configuration, HttpClient httpClient)
+        public CvModel(CVController cvController)
         {
-            var apiBaseUrl = configuration["ApiSettings:BaseUrl"];
-            if (string.IsNullOrEmpty(apiBaseUrl))
-            {
-                throw new Exception("API base URL is not configured.");
-            }
-
-            _apiBaseUrl = apiBaseUrl;
-            _httpClient = httpClient;
+            _cvController = cvController;
         }
 
         public List<CV> CVs { get; set; } = new();
@@ -27,13 +23,60 @@ namespace MyCvSite.Pages
         {
             try
             {
-                var existingCVs = await _httpClient.GetFromJsonAsync<List<CV>>($"{_apiBaseUrl}/cv");
-                CVs = existingCVs ?? new List<CV>();
+                var result = await _cvController.GetAllCvs();
+                if (result is OkObjectResult okResult && okResult.Value is List<CV> existingCVs)
+                {
+                    CVs = existingCVs;
+                }
+                else
+                {
+                    CVs = new List<CV>();
+                    Console.WriteLine("Failed to fetch CVs.");
+                }
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while fetching CVs: {ex.Message}");
                 CVs = new List<CV>();
+            }
+        }
+
+        public async Task<IActionResult> OnPostCreate(IFormFile cv)
+        {
+            if (cv == null || cv.Length == 0)
+            {
+                TempData["Error"] = "Please select a valid PDF file.";
+                return RedirectToPage();
+            }
+
+            try
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+                if (string.IsNullOrEmpty(userId))
+                {
+                    TempData["Error"] = "Unable to get user Id.";
+                    return RedirectToPage();
+                }
+
+                var result = await _cvController.Create(cv, Guid.Parse(userId));
+
+                if (result is OkObjectResult)
+                {
+                    TempData["Success"] = "CV uploaded successfully.";
+                }
+                else
+                {
+                    TempData["Error"] = "Failed to upload CV.";
+                }
+
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while uploading the CV: {ex.Message}");
+                TempData["Error"] = "An internal error occurred.";
+                return RedirectToPage();
             }
         }
     }

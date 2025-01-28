@@ -21,11 +21,6 @@ namespace MyCvSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] IFormFile cv, [FromForm] Guid userId)
         {
-            if (cv == null || cv.Length == 0)
-            {
-                return BadRequest(new { Message = "Please provide a valid PDF file." });
-            }
-
             try
             {
                 var createCvResult = await _mediator.Send(new CreateCVCommand(cv, userId));
