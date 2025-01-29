@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace MyCvSite.Pages
 {
-    //[Authorize]
+    [Authorize]
     public class CvModel : PageModel
     {
         private readonly CVController _cvController;
