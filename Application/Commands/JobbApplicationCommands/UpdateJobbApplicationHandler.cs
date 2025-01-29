@@ -5,11 +5,11 @@ using MediatR;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class UpdateJobbApplicationHandler : IRequestHandler<UpdateJobbApplicationCommand, Unit>
+public class UpdateCvCommandHandler : IRequestHandler<UpdateJobbApplicationCommand, Unit>
 {
     private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public UpdateJobbApplicationHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
+    public UpdateCvCommandHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }
