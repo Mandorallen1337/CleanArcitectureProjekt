@@ -15,9 +15,9 @@ namespace TestProject
     public class JobbApplicationTest
     {
         private Mock<IRepository<JobbApplicationViewModel>> _jobbApplicationRepositoryMock;
-        private CreateCvCommandHandler _createHandler;
-        private DeleteCvCommandHandler _deleteHandler;
-        private UpdateCvCommandHandler _updateHandler;
+        private CreateJobbApplicationHandler _createHandler;
+        private DeleteJobbApplicationHandler _deleteHandler;
+        private UpdateJobbApplicationHandler _updateHandler;
 
         [SetUp]
         public void SetUp()
@@ -25,9 +25,9 @@ namespace TestProject
             _jobbApplicationRepositoryMock = new Mock<IRepository<JobbApplicationViewModel>>();
 
             // Initiera handlers
-            _createHandler = new CreateCvCommandHandler(_jobbApplicationRepositoryMock.Object);
-            _deleteHandler = new DeleteCvCommandHandler(_jobbApplicationRepositoryMock.Object);
-            _updateHandler = new UpdateCvCommandHandler(_jobbApplicationRepositoryMock.Object);
+            _createHandler = new CreateJobbApplicationHandler(_jobbApplicationRepositoryMock.Object);
+            _deleteHandler = new DeleteJobbApplicationHandler(_jobbApplicationRepositoryMock.Object);
+            _updateHandler = new UpdateJobbApplicationHandler(_jobbApplicationRepositoryMock.Object);
         }
 
         [Test]

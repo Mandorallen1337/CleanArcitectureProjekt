@@ -6,11 +6,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class DeleteCvCommandHandler : IRequestHandler<DeleteJobbApplicationCommand, bool>
+public class DeleteJobbApplicationHandler : IRequestHandler<DeleteJobbApplicationCommand, bool>
 {
     private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public DeleteCvCommandHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
+    public DeleteJobbApplicationHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }

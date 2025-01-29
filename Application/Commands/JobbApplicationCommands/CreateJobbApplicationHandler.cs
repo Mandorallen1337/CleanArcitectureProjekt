@@ -7,11 +7,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-public class CreateCvCommandHandler : IRequestHandler<CreateJobbApplicationCommand, JobbApplicationViewModel>
+public class CreateJobbApplicationHandler : IRequestHandler<CreateJobbApplicationCommand, JobbApplicationViewModel>
 {
     private readonly IRepository<JobbApplicationViewModel> _jobbApplicationRepository;
 
-    public CreateCvCommandHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
+    public CreateJobbApplicationHandler(IRepository<JobbApplicationViewModel> jobbApplicationRepository)
     {
         _jobbApplicationRepository = jobbApplicationRepository;
     }
