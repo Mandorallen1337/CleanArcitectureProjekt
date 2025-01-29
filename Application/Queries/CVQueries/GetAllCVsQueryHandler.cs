@@ -20,8 +20,6 @@ namespace Application.Queries.CVQueries
         {
             try
             {
-                _logger.LogInformation("Fetching all CVs from the repository.");
-
                 var allCVs = await _cvRepository.GetAllAsync();
 
                 if (allCVs.Count == 0)
