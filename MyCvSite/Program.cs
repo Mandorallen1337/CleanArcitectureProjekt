@@ -26,6 +26,7 @@ namespace MyCvSite
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddTransient<JobbApplicationController>();
+            builder.Services.AddTransient<CVController>();
 
 
             var app = builder.Build();
