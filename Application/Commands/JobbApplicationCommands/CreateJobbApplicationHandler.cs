@@ -1,5 +1,5 @@
 ﻿using Application.Commands.JobbApplicationCommands;
-using Application.Dtos;
+
 using Application.Interfaces.RepoInterface;
 using Domain.Models;
 using MediatR;

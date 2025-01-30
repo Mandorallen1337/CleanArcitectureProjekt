@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("CVs");
                 });
 
-            modelBuilder.Entity("Domain.Models.JobbApplication", b =>
+            modelBuilder.Entity("Domain.Models.JobbApplicationViewModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
