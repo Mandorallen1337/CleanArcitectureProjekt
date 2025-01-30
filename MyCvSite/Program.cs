@@ -1,8 +1,11 @@
 using Application;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Infrastructure;
 using Infrastructure.Databases;
 using Microsoft.AspNetCore.Identity;
 using MyCvSite.Controllers;
+using MyCvSite.Validators;
 
 namespace MyCvSite
 {
@@ -15,6 +18,10 @@ namespace MyCvSite
             // Add services to the container.
             builder.Configuration.AddUserSecrets<Program>();
             builder.Services.AddControllers();
+            builder.Services.AddFluentValidationAutoValidation()
+                .AddFluentValidationClientsideAdapters()
+                .AddValidatorsFromAssemblyContaining<JobbApplicationViewModelValidator>();
+
             builder.Services.AddEndpointsApiExplorer();
 
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -27,6 +34,7 @@ namespace MyCvSite
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddTransient<JobbApplicationController>();
 
+           
 
             var app = builder.Build();
 
