@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(Database))]
-    [Migration("20250121102112_TestMigration")]
+    [Migration("20250130082435_TestMigration")]
     partial class TestMigration
     {
         /// <inheritdoc />
@@ -31,6 +31,10 @@ namespace Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FileUrl")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -46,7 +50,7 @@ namespace Infrastructure.Migrations
                     b.ToTable("CVs");
                 });
 
-            modelBuilder.Entity("Domain.Models.JobbApplication", b =>
+            modelBuilder.Entity("Domain.Models.JobbApplicationViewModel", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()

@@ -1,5 +1,5 @@
-﻿using Application.Dtos;
-using Domain.Models;
+﻿using Domain.Models;
+using Domain.ViewModels;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.JobbApplicationQuerys
 {
-    public class GetJobbApplicationByIdQuery : IRequest<JobbApplicationDto>
+    public class GetJobbApplicationByIdQuery : IRequest<JobApplicationViewModel>
     {
         public Guid Id { get; }
 
