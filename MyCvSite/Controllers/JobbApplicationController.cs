@@ -55,9 +55,14 @@ namespace MyCvSite.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateJobbApplication([FromBody] JobbApplicationViewModel jobbApplication)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for creating job application.");
+                return BadRequest(ModelState);
+            }
+
             _logger.LogInformation("Creating a new job application for job title {JobTitle}.", jobbApplication.JobTitle);
 
-            // Skapa ett nytt CreateJobbApplicationCommand och skicka till MediatR
             var createCommand = new CreateJobbApplicationCommand
             {
                 JobTitle = jobbApplication.JobTitle,
@@ -68,27 +73,29 @@ namespace MyCvSite.Controllers
 
             await _mediator.Send(createCommand);
 
-            // Hämta den uppdaterade listan efter skapandet
             var updatedJobApplications = await _mediator.Send(new GetAllJobbApplicationsQuery());
-
             _logger.LogInformation("Returning updated job applications list.");
+
             return Ok(updatedJobApplications);
         }
-
 
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> UpdateJobbApplication(Guid id, [FromBody] UpdateJobbApplicationCommand command, CancellationToken cancellationToken)
         {
             if (id != command.Id)
             {
+                _logger.LogWarning("Job application ID mismatch: {Id} vs {CommandId}", id, command.Id);
                 return BadRequest("Job application ID mismatch.");
             }
 
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Invalid model state for updating job application.");
+                return BadRequest(ModelState);
+            }
+
             _logger.LogInformation("Updating job application with ID {Id}.", id);
-
-            // Skicka kommandot via MediatR
             await _mediator.Send(command, cancellationToken);
-
             _logger.LogInformation("Updated job application with ID {Id}.", id);
 
             return NoContent();
