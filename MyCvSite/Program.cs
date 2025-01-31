@@ -1,7 +1,7 @@
 using Application;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Application.Interfaces.OpenAiInterface 
+using Application.Interfaces.OpenAiInterface; 
 using Infrastructure;
 using Infrastructure.Databases;
 using Infrastructure.Services;
