@@ -28,7 +28,11 @@ namespace MyCvSite
             builder.Services.AddApplication();
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddTransient<JobbApplicationController>();
+
             builder.Services.AddHttpClient<IOpenAiService, OpenAiService>();
+          
+            builder.Services.AddTransient<CVController>();
+
 
 
             var app = builder.Build();

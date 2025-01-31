@@ -21,11 +21,6 @@ namespace MyCvSite.Controllers
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] IFormFile cv, [FromForm] Guid userId)
         {
-            if (cv == null || cv.Length == 0)
-            {
-                return BadRequest(new { Message = "Please provide a valid PDF file." });
-            }
-
             try
             {
                 var createCvResult = await _mediator.Send(new CreateCVCommand(cv, userId));
@@ -121,7 +116,7 @@ namespace MyCvSite.Controllers
             {
                 var deleteCvByIdResult = await _mediator.Send(new DeleteCVByIdCommand(id));
                 _logger.LogInformation("Successfully deleted CV with ID {CvId}.", id);
-                return Ok(deleteCvByIdResult);
+                return Ok();
             }
             catch (Exception ex)
             {
