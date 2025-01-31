@@ -1,8 +1,10 @@
 using Application;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Application.Interfaces.OpenAiInterface 
 using Infrastructure;
 using Infrastructure.Databases;
+using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using MyCvSite.Controllers;
 using MyCvSite.Validators;
@@ -34,7 +36,13 @@ namespace MyCvSite
             builder.Services.AddInfrastructure(builder.Configuration);
             builder.Services.AddTransient<JobbApplicationController>();
 
-           
+
+         
+            builder.Services.AddHttpClient<IOpenAiService, OpenAiService>();
+          
+            builder.Services.AddTransient<CVController>();
+
+
 
             var app = builder.Build();
 
