@@ -5,7 +5,6 @@ using Application.Interfaces.RepoInterface;
 using Domain.Models;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using System.Text;
 
 public class AnalyzeCvCommandHandler : IRequestHandler<AnalyzeCvCommand, AnalysisResult>
 {
@@ -30,7 +29,7 @@ public class AnalyzeCvCommandHandler : IRequestHandler<AnalyzeCvCommand, Analysi
     {
         try
         {
-            // 🔹 Step 1: Fetch CV from Database
+            // Fetch CV from Database
             var cv = await _cvRepository.GetByIdAsync(request.CvId, cancellationToken);
             if (cv == null || string.IsNullOrEmpty(cv.FileUrl))
             {
@@ -38,14 +37,11 @@ public class AnalyzeCvCommandHandler : IRequestHandler<AnalyzeCvCommand, Analysi
                 throw new KeyNotFoundException($"CV with ID {request.CvId} was not found.");
             }
 
-            // 🔹 Step 2: Get File from Azure Blob Storage
+            // Get File from Azure Blob Storage
             string blobFileName = cv.FileUrl;
             using var stream = await _blobStorage.DownloadFileAsync(blobFileName);
             
-            //var cvText = _openAiService.ExtractTextFromPdf(stream);
-
-
-            // 🔹 Step 3: Send Text to OpenAI for Analysis
+            // Send Text to OpenAI for Analysis
             string cvText = await _openAiService.ExtractTextFromPdf(stream);
 
             if (cvText == null || string.IsNullOrEmpty(cvText))
@@ -54,8 +50,6 @@ public class AnalyzeCvCommandHandler : IRequestHandler<AnalyzeCvCommand, Analysi
                 return new AnalysisResult
                 {
                     Summary = "Unable to extract useful information from CV",
-                    KeySkills = new List<string>(),
-                    ExperienceDetails = "No experience details found"
                 };
             }
 

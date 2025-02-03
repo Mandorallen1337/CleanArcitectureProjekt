@@ -139,7 +139,7 @@ namespace MyCvSite.Controllers
                     return BadRequest("Failed to analyze CV.");
                 }
 
-                return Ok(new { message = result });
+                return Ok(result);
             }
             catch (Exception ex)
             {
@@ -147,6 +147,5 @@ namespace MyCvSite.Controllers
                 return StatusCode(500, "An error occurred while analyzing the CV.");
             }
         }
-
     }
 }
