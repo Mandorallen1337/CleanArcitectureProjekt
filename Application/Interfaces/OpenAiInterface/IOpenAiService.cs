@@ -1,4 +1,5 @@
 ﻿using Domain.Models;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,8 @@ using System.Threading.Tasks;
 namespace Application.Interfaces.OpenAiInterface
 {
     public interface IOpenAiService
-    {
+    {        
         Task<AnalysisResult> AnalyzeTextAsync(string text);
+        Task<string> ExtractTextFromPdf(IFormFile stream);
     }
 }
