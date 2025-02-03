@@ -1,13 +1,13 @@
 using Application;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Application.Interfaces.OpenAiInterface; 
+using Application.Interfaces.OpenAiInterface;
 using Infrastructure;
 using Infrastructure.Databases;
-using Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
 using MyCvSite.Controllers;
 using MyCvSite.Validators;
+using Infrastructure.Services.OpenAiService;
 
 namespace MyCvSite
 {

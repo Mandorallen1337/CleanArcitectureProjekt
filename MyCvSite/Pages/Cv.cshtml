@@ -19,6 +19,20 @@
     </div>
 }
 
+<!-- Analysis Result Section -->
+@if (!string.IsNullOrEmpty(Model.Analysis?.Summary))
+{
+    <div class="card shadow-sm mt-4 p-3">
+        <h4>Analysis Result</h4>
+        <p><strong>Summary:</strong> @(string.IsNullOrEmpty(Model.Analysis.Summary) ? "No summary available" : Model.Analysis.Summary)</p>
+    </div>
+}
+else
+{
+    <p>No analysis results yet.</p>
+}
+
+
 <!-- Uppladdningsformulär -->
 <div class="card shadow-sm mb-4 p-3 text-center">
     <h4>Upload CV</h4>

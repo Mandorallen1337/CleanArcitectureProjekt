@@ -1,11 +1,9 @@
-﻿using Application.Interfaces.OpenAiInterface;
-using Domain.Models;
+﻿using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
 using MyCvSite.Controllers;
-using System.Diagnostics;
 using System.Security.Claims;
 
 namespace MyCvSite.Pages
@@ -16,8 +14,6 @@ namespace MyCvSite.Pages
         private readonly CVController _cvController;
         private readonly IMemoryCache _cache;
         
-
-
         public CvModel(CVController cvController, IMemoryCache cache)
         {
             _cvController = cvController;
@@ -31,34 +27,28 @@ namespace MyCvSite.Pages
         {
             try
             {
-                // Fetch CVs from the CV Controller
                 var result = await _cvController.GetAllCvs();
 
-                // Check if the result is valid
                 if (result is OkObjectResult okResult && okResult.Value is List<CV> cvs)
                 {
-                    // Assign the fetched CVs to the CVs property
                     CVs = cvs;
                 }
                 else
                 {
-                    // Handle the case where the result is invalid
-                    CVs = new List<CV>(); // Initialize with an empty list if no CVs are found
+                    CVs = new List<CV>(); 
                 }
             }
             catch (Exception ex)
             {                                
-                CVs = new List<CV>(); // Initialize with an empty list if an error occurs
+                CVs = new List<CV>(); 
             }
         }
-
 
         public async Task<IActionResult> OnGet()
         {
             await LoadCvsAsync();
             return Page();
         }
-
 
         public async Task<IActionResult> OnPostCreate(IFormFile cv)
         {
@@ -133,23 +123,17 @@ namespace MyCvSite.Pages
         {
             try
             {
-                //Get the analysis result from the CV Controller
                 var result = await _cvController.AnalyzeCv(cvId);
 
-                //Check if the result is valid
-                if (result is AnalysisResult analysisResult)
+                if (result is OkObjectResult okResult && okResult.Value is AnalysisResult analysisResult)
                 {
-                    //Assign the fetched analysis result to the Analysis property
-                    Analysis = analysisResult;                    
+                    Analysis = analysisResult; 
                 }
                 else
                 {
-                    //Handle the case where the result is invalid
-                    Analysis = new AnalysisResult
-                    {
-                        Summary = "Unable to extract useful information from CV",
-                    };
+                    Analysis = new AnalysisResult { Summary = "Failed to analyze CV." };
                 }
+
                 await LoadCvsAsync();
                 return Page();
             }
@@ -159,15 +143,7 @@ namespace MyCvSite.Pages
                 TempData["Error"] = "An internal error occurred.";
                 return Page();
             }
-
         }
-
-
-
-
-
-        
-
     }
 }
 

@@ -2,9 +2,6 @@
 using Application.Interfaces.RepoInterface;
 using Domain.Models;
 using MediatR;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 public class DeleteJobbApplicationHandler : IRequestHandler<DeleteJobbApplicationCommand, bool>
 {
