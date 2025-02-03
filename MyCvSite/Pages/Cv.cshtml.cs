@@ -3,6 +3,7 @@ using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Memory;
 using MyCvSite.Controllers;
 using System.Diagnostics;
 using System.Security.Claims;
@@ -13,28 +14,49 @@ namespace MyCvSite.Pages
     public class CvModel : PageModel
     {
         private readonly CVController _cvController;
-        private readonly IOpenAiService _openAiService;
+        private readonly IMemoryCache _cache;
+        
 
-        public CvModel(CVController cvController, IOpenAiService openAiService)
+
+        public CvModel(CVController cvController, IMemoryCache cache)
         {
             _cvController = cvController;
-            _openAiService = openAiService;
+            _cache = cache;            
         }
 
-        public List<CV> CVs { get; set; } = new();
-        public AnalysisResult Analysis { get; set; }
+        public List<CV> CVs { get; set; } = new List<CV>();
+        public AnalysisResult Analysis { get; set; } = new AnalysisResult();
 
-        public async Task OnGet()
+        private async Task LoadCvsAsync()
         {
             try
             {
-                await LoadCvsAsync();
+                // Fetch CVs from the CV Controller
+                var result = await _cvController.GetAllCvs();
+
+                // Check if the result is valid
+                if (result is OkObjectResult okResult && okResult.Value is List<CV> cvs)
+                {
+                    // Assign the fetched CVs to the CVs property
+                    CVs = cvs;
+                }
+                else
+                {
+                    // Handle the case where the result is invalid
+                    CVs = new List<CV>(); // Initialize with an empty list if no CVs are found
+                }
             }
             catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred while fetching CVs: {ex.Message}");
-                CVs = new List<CV>();
+            {                                
+                CVs = new List<CV>(); // Initialize with an empty list if an error occurs
             }
+        }
+
+
+        public async Task<IActionResult> OnGet()
+        {
+            await LoadCvsAsync();
+            return Page();
         }
 
 
@@ -107,42 +129,44 @@ namespace MyCvSite.Pages
             return RedirectToPage();
         }
 
-        public async Task<IActionResult> OnPostAnalyzeAsync(IFormFile cv)
+        public async Task<IActionResult> OnPostAnalyzeAsync(Guid cvId)
         {
             try
-            {                            
-                var result = await _cvController.AnalyzeCv(cv);
-                TempData["AnalysisResult"] = result;
+            {
+                //Get the analysis result from the CV Controller
+                var result = await _cvController.AnalyzeCv(cvId);
 
-                return RedirectToPage();
+                //Check if the result is valid
+                if (result is AnalysisResult analysisResult)
+                {
+                    //Assign the fetched analysis result to the Analysis property
+                    Analysis = analysisResult;                    
+                }
+                else
+                {
+                    //Handle the case where the result is invalid
+                    Analysis = new AnalysisResult
+                    {
+                        Summary = "Unable to extract useful information from CV",
+                    };
+                }
+                await LoadCvsAsync();
+                return Page();
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while analyzing the CV: {ex.Message}");
                 TempData["Error"] = "An internal error occurred.";
-                return RedirectToPage();
+                return Page();
             }
+
         }
 
 
 
 
 
-        private async Task LoadCvsAsync()
-        {
-            var result = await _cvController.GetAllCvs();
-            if (result is OkObjectResult okResult && okResult.Value is List<CV> existingCVs)
-            {
-                CVs = existingCVs;
-                Console.WriteLine($"CVs loaded: {CVs.Count}");
-            }
-            else
-            {
-                CVs = new List<CV>();
-                Console.WriteLine("Failed to load CVs.");
-            }
-            return;
-        }
+        
 
     }
 }

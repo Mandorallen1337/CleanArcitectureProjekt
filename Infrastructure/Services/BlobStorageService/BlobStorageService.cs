@@ -49,18 +49,18 @@ namespace Infrastructure.Services.BlobStorageService
         //MemoryStream is used to temporarily store the downloaded file in memory instead of writing it to disk 
         public async Task<Stream> DownloadFileAsync(string fileUrl)
         {
-            string fileName = Path.GetFileName(new Uri(fileUrl).AbsolutePath);
+            var uri = new Uri(fileUrl);
+            string fileName = Path.GetFileName(uri.LocalPath);
 
             var containerClient = _blobServiceClient.GetBlobContainerClient(_containerName);
             var blobClient = containerClient.GetBlobClient(fileName);
 
             var result = await blobClient.DownloadAsync();
+
             var memoryStream = new MemoryStream();
-
             await result.Value.Content.CopyToAsync(memoryStream);
-            memoryStream.Position = 0;  
-
-            return memoryStream;
+            memoryStream.Position = 0;
+            return memoryStream;            
         }
 
         //Deletes file from Azure if it exist and return true/false

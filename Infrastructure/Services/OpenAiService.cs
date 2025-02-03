@@ -72,22 +72,25 @@ namespace Infrastructure.Services
             };
         }
 
-        public Task<string> ExtractTextFromPdf(IFormFile cvFile)
+        public Task<string> ExtractTextFromPdf(Stream pdfStream)
         {
-            if (cvFile == null || cvFile.Length == 0)
+            if (pdfStream == null || pdfStream.Length == 0)
             {
                 throw new ArgumentNullException("No file uploaded.");
             }
-            using var pdfStream = cvFile.OpenReadStream();
 
+            // Use the pdfStream directly instead of converting to byte array
             using var pdfDocument = PdfDocument.Open(pdfStream);
             var text = new StringBuilder();
+
             foreach (var page in pdfDocument.GetPages())
             {
                 text.Append(page.Text);
             }
+
             return Task.FromResult(text.ToString());
         }
+
 
         private async Task<(List<string> Skills, string Experience)> AnalyzeSkillsAndExperience(string summary)
         {
