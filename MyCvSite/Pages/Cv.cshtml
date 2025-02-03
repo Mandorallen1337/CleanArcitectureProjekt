@@ -1,62 +1,90 @@
 ﻿@page
+@using Domain.Models
 @model MyCvSite.Pages.CvModel
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
 
 @if (TempData["Success"] != null)
 {
-	<div class="alert alert-success alert-dismissible fade show" role="alert">
-		@TempData["Success"]
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	</div>
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Success"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
+
 @if (TempData["Error"] != null)
 {
-	<div class="alert alert-danger alert-dismissible fade show" role="alert">
-		@TempData["Error"]
-		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-	</div>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["Error"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 }
 
-<div class="card shadow-sm p-4 mb-4">
-	<table class="table">
-		<thead>
-			<tr>
-				<th></th>
-				<th></th>
-				<th></th>
-				<th></th>
-			</tr>
-		</thead>
-		<tbody>
-			@foreach(var cv in Model.CVs)
-			{
-				<tr>
-					<td>
-						<a href="@cv.FileUrl" target="blank" title="Download">
-							@cv.FileName
-						</a>
-					</td>
-					<td>@cv.UploadDate</td>
-					<td>
-						<button type="submit" class="btn" title="Analyze"><i class="bi bi-robot fs-5"></i></button>
-					</td>
-					<td>
-						<form method="post" asp-page-handler="Delete" onsubmit="return confirm('Are you sure you want to delete this CV?');">
-							<input type="hidden" name="id" value="@cv.Id" />
-							<button type="submit" class="btn" title="Delete">
-								<i class="bi bi-trash fs-5"></i>
-							</button>
-						</form>
-					</td>
-				</tr>
-			}
-		</tbody>
-	</table>
+<!-- Uppladdningsformulär -->
+<div class="card shadow-sm mb-4 p-3 text-center">
+    <h4>Upload CV</h4>
+    <form method="post" asp-page-handler="Create" enctype="multipart/form-data">
+        <input type="file" id="cvFile" name="cv" class="form-control mb-3" accept=".pdf" required />
+        <button type="submit" class="btn btn-success" title="Upload">
+            <i class="bi bi-cloud-upload fs-3"></i> Upload
+        </button>
+    </form>
 </div>
 
-<div class="card shadow-sm mb-4 w-15 text-center">
-	<form method="post" asp-page-handler="Create" enctype="multipart/form-data">
-		<input type="file" id="cvFile" name="cv" class="form-control mb-3" />
-		<button type="submit" class="btn" title="Upload"><i class="bi bi-cloud-upload fs-3"></i></button>
-	</form>
+<!-- Lista över uppladdade CV -->
+<h3>Uploaded CVs</h3>
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>File</th>
+                <th>Upload Date</th>
+                <th>Analyze</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var cv in Model.CVs.DistinctBy(c => c.Id))
+            {
+                <tr>
+                    <td>
+                        <a href="@cv.FileUrl" target="_blank" title="Download">@cv.FileName</a>
+                    </td>
+                    <td>@cv.UploadDate</td>
+                    <td>
+                        <form method="post" asp-page-handler="AnalyzeAsync">
+                            <input type="hidden" name="cvId" value="@cv.Id" />
+                            <button type="submit" class="btn btn-primary" title="Analyze">
+                                <i class="bi bi-robot fs-5"></i> Analyze
+                            </button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" asp-page-handler="Delete" onsubmit="return confirm('Are you sure you want to delete this CV?');">
+                            <input type="hidden" name="id" value="@cv.Id" />
+                            <button type="submit" class="btn btn-danger" title="Delete">
+                                <i class="bi bi-trash fs-5"></i>
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
 </div>
+
+<!-- Analysresultat -->
+@if (TempData["AnalysisResult"] != null)
+{
+    var analysisResult = TempData["AnalysisResult"] as AnalysisResult;
+
+    <div class="card shadow-sm mt-4 p-3">
+        <h4>Analysis Result</h4>
+        <p><strong>Summary:</strong> @(string.IsNullOrEmpty(analysisResult.Summary) ? "No summary available" : analysisResult.Summary)</p>
+        <p><strong>Key Skills:</strong> @(analysisResult.KeySkills.Any() ? string.Join(", ", analysisResult.KeySkills) : "No skills detected")</p>
+        <p><strong>Experience Details:</strong> @(string.IsNullOrEmpty(analysisResult.ExperienceDetails) ? "No experience details available" : analysisResult.ExperienceDetails)</p>
+    </div>
+}
+else
+{
+    <p>No analysis results yet.</p>
+}

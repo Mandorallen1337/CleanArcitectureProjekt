@@ -1,8 +1,10 @@
+﻿using Application.Interfaces.OpenAiInterface;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MyCvSite.Controllers;
+using System.Diagnostics;
 using System.Security.Claims;
 
 namespace MyCvSite.Pages
@@ -11,28 +13,22 @@ namespace MyCvSite.Pages
     public class CvModel : PageModel
     {
         private readonly CVController _cvController;
+        private readonly IOpenAiService _openAiService;
 
-        public CvModel(CVController cvController)
+        public CvModel(CVController cvController, IOpenAiService openAiService)
         {
             _cvController = cvController;
+            _openAiService = openAiService;
         }
 
         public List<CV> CVs { get; set; } = new();
+        public AnalysisResult Analysis { get; set; }
 
         public async Task OnGet()
         {
             try
             {
-                var result = await _cvController.GetAllCvs();
-                if (result is OkObjectResult okResult && okResult.Value is List<CV> existingCVs)
-                {
-                    CVs = existingCVs;
-                }
-                else
-                {
-                    CVs = new List<CV>();
-                    Console.WriteLine("Failed to fetch CVs.");
-                }
+                await LoadCvsAsync();
             }
             catch (Exception ex)
             {
@@ -40,6 +36,7 @@ namespace MyCvSite.Pages
                 CVs = new List<CV>();
             }
         }
+
 
         public async Task<IActionResult> OnPostCreate(IFormFile cv)
         {
@@ -63,7 +60,7 @@ namespace MyCvSite.Pages
 
                 if (result is OkObjectResult)
                 {
-                    TempData["Success"] = "CV uploaded successfully.";
+                    TempData["Success"] = "CV uploaded successfully.";                                        
                 }
                 else
                 {
@@ -109,6 +106,44 @@ namespace MyCvSite.Pages
 
             return RedirectToPage();
         }
+
+        public async Task<IActionResult> OnPostAnalyzeAsync(IFormFile cv)
+        {
+            try
+            {                            
+                var result = await _cvController.AnalyzeCv(cv);
+                TempData["AnalysisResult"] = result;
+
+                return RedirectToPage();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while analyzing the CV: {ex.Message}");
+                TempData["Error"] = "An internal error occurred.";
+                return RedirectToPage();
+            }
+        }
+
+
+
+
+
+        private async Task LoadCvsAsync()
+        {
+            var result = await _cvController.GetAllCvs();
+            if (result is OkObjectResult okResult && okResult.Value is List<CV> existingCVs)
+            {
+                CVs = existingCVs;
+                Console.WriteLine($"CVs loaded: {CVs.Count}");
+            }
+            else
+            {
+                CVs = new List<CV>();
+                Console.WriteLine("Failed to load CVs.");
+            }
+            return;
+        }
+
     }
 }
 

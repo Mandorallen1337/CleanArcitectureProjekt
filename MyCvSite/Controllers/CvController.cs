@@ -12,6 +12,7 @@ namespace MyCvSite.Controllers
         private readonly IMediator _mediator;
         private readonly ILogger<CVController> _logger;
 
+
         public CVController(IMediator mediator, ILogger<CVController> logger)
         {
             _mediator = mediator;
@@ -121,6 +122,28 @@ namespace MyCvSite.Controllers
             catch (Exception ex)
             {
                 _logger.LogError(ex, "An error occurred while deleting CV with ID {CvId}.", id);
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+        }
+
+        [HttpPost("analyze")]
+        public async Task<IActionResult> AnalyzeCv([FromForm] IFormFile cv)
+        {
+            try
+            {
+                if (cv == null || cv.Length == 0)
+                {
+                    return BadRequest("No file uploaded.");
+                }
+
+                
+                var respone = await _mediator.Send(new AnalyzeCvCommand(cv));
+
+                return Ok(respone);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while analyzing CV.");
                 return StatusCode(500, "An error occurred while processing your request.");
             }
         }
