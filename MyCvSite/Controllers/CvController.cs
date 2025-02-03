@@ -126,26 +126,27 @@ namespace MyCvSite.Controllers
             }
         }
 
-        [HttpPost("analyze")]
-        public async Task<IActionResult> AnalyzeCv([FromForm] IFormFile cv)
+        [HttpPost("analyze/{cvId}")]
+        public async Task<IActionResult> AnalyzeCv(Guid cvId)
         {
             try
             {
-                if (cv == null || cv.Length == 0)
+                var result = await _mediator.Send(new AnalyzeCvCommand(cvId));
+
+                if (result == null)
                 {
-                    return BadRequest("No file uploaded.");
+                    _logger.LogWarning("Failed to analyze CV with ID {CvId}.", cvId);
+                    return BadRequest("Failed to analyze CV.");
                 }
 
-                
-                var respone = await _mediator.Send(new AnalyzeCvCommand(cv));
-
-                return Ok(respone);
+                return Ok(new { message = result });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while analyzing CV.");
-                return StatusCode(500, "An error occurred while processing your request.");
+                _logger.LogError(ex, "Error analyzing CV with ID {CvId}.", cvId);
+                return StatusCode(500, "An error occurred while analyzing the CV.");
             }
         }
+
     }
 }

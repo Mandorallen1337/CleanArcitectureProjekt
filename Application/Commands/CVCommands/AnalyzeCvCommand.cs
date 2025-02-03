@@ -11,10 +11,10 @@ namespace Application.Commands.CVCommands
 {
     public class AnalyzeCvCommand : IRequest<AnalysisResult>
     {
-        public IFormFile CvFile { get; }
-        public AnalyzeCvCommand(IFormFile cvFile)
+        public Guid CvId { get; }
+        public AnalyzeCvCommand(Guid cvId)
         {
-            CvFile = cvFile ?? throw new ArgumentNullException(nameof(cvFile));
+            CvId = cvId;
         }
     }
 }
